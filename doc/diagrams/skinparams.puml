@@ -1,0 +1,9 @@
+@startuml
+
+skinparam {
+    monochrome true
+    shadowing false
+    linetype polyline
+}
+
+@enduml

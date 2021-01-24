@@ -1,0 +1,14 @@
+@startuml
+
+class GameState {
+    int player
+    int capturesBlack
+    int capturesWhite
+    List board
+    List prevBoards # for ko
+    GameTree gameTree
+    GameMove lastMove
+    GameData gameData
+}
+
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+
+object sgflex {
+	input()
+	token()
+}
+
+@enduml

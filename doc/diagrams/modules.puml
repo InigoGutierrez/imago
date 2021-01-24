@@ -1,0 +1,9 @@
+@startuml
+
+!include ./skinparams.puml
+
+!include GameState.pumlc
+!include SGF.pumlc
+!include MoveParser.pumlc
+
+@enduml

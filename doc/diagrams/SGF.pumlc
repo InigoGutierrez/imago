@@ -1,0 +1,8 @@
+@startuml
+
+class SGF {
+    GameTree loadGameTree(file)
+    void saveGameTree(file)
+}
+
+@enduml

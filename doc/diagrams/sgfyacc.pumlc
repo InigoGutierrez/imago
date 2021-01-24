@@ -1,0 +1,8 @@
+@startuml
+
+object sgfyacc {
+	parse()
+}
+
+@enduml
+

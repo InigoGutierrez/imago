@@ -1,0 +1,7 @@
+@startuml
+
+class MoveParser {
+    int[] parseMove(input)
+}
+
+@enduml

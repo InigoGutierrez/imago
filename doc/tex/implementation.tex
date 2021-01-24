@@ -1,0 +1,64 @@
+\section{Implementation}
+
+\subsection{Engine}
+
+An engine implementing GTP.\@ It is designed to be used by a software controller
+but can also be directly run, mostly for debugging purposes. Its design is shown
+in \fref{fig:engine}
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=\textwidth]{diagrams/gtpEngine.png}
+		\caption{Design of the GTP engine.}\label{fig:engine}
+	\end{center}
+\end{figure}
+
+\subsection{Modules}
+
+One module to store the state of the game and the game tree. One module to parse
+moves. One module to read and write SGF files. Modules are shown in
+\fref{fig:modules}.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=\textwidth]{diagrams/modules.png}
+		\caption{Modules.}\label{fig:modules}
+	\end{center}
+\end{figure}
+
+\subsection{Representation of a match}
+
+Strictly said, a match is composed of a series of moves. But since game review
+and variants exploration is an important part of Go learing, \program{} allows
+for navigation back and forth through the board states of a match and for new
+variants to be created from each of these board states. Therefore, a match is
+represented as a tree of moves. The state of the game must also be present so
+liberties, captures and legality of moves can be addressed, so it is represented
+with its own class, which holds a reference both to the game tree and the
+current move. This classes and their relationship can be seen in
+\fref{fig:gameRepresentation}.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{diagrams/gameRepresentation.png}
+		\caption{A game is represented as a tree of moves.}\label{fig:gameRepresentation}
+	\end{center}
+\end{figure}
+
+\subsection{SGF}
+
+To parse SGF files a lexer and parser have been implemented using PLY.\@ The
+result of the parsing is an AST (Annotated Syntax Tree) reflecting the contents
+of the text input, each node with zero or more properties, and with the ability
+to convert themselves and their corresponding subtree into a GameTree. This is
+done for the root node, since from the SGF specification there are some
+properties only usable in the root node, like those which specify general game
+information and properties such as rank of players or komi. These components are
+shown in \fref{fig:sgfModule}.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=\textwidth]{diagrams/sgfModule.png}
+		\caption{Components of the SGF file parsing module.}\label{fig:sgfModule}
+	\end{center}
+\end{figure}

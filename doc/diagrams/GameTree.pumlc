@@ -1,0 +1,8 @@
+@startuml
+
+class GameTree {
+    GameNode[] firstMoves
+	GameData gameData
+}
+
+@enduml

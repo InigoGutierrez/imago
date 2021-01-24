@@ -1,0 +1,14 @@
+@startuml
+
+!include skinparams.puml
+
+!include GameState.pumlc
+!include GameTree.pumlc
+!include GameMove.pumlc
+
+GameState --> GameTree
+GameState --> GameMove: Current move
+GameTree *--> GameMove
+GameMove -> GameMove
+
+@enduml

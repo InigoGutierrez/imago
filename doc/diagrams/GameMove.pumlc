@@ -1,0 +1,13 @@
+@startuml
+
+class GameMove {
+    int player
+    int row
+    int col
+    int[2] makesKo
+    int[] board
+    GameMove[] nextMoves
+    GameMove previousMove
+}
+
+@enduml

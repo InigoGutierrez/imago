@@ -1,0 +1,14 @@
+*.sgf
+
+# doc
+*.pdf
+doc/out/
+doc/diagrams/*.png
+
+# src
+__pycache__/
+.coverage
+
+# ply
+parser.out
+parsetab.py

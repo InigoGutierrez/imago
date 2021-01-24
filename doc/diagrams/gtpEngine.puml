@@ -1,0 +1,29 @@
+@startuml
+
+!include skinparams.puml
+
+class EngineCore {
+}
+
+class IO {
+    processComand()
+}
+
+!include GameState.pumlc
+
+'class EngineBoard {
+'    setSize()
+'    setKomi()
+'    play()
+'    undo()
+'}
+
+class EngineAI {
+    genmove(board)
+}
+
+EngineCore --> IO
+EngineCore --> GameState
+EngineCore --> EngineAI
+
+@enduml

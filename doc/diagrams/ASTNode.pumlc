@@ -1,0 +1,10 @@
+@startuml
+
+class ASTNode {
+	ASTNode[] children
+	Property properties
+	void addtoSequence()
+	GameTree toGameTree()
+}
+
+@enduml

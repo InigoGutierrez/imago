@@ -1,0 +1,60 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{csquotes}
+
+\usepackage[backend=biber, style=numeric-comp]{biblatex}
+\addbibresource{/home/taamas/docs/biber.bib}
+
+\geometry{left=4.5cm,top=2cm,bottom=2cm,right=4.5cm}
+
+\hypersetup{colorlinks=true,
+	linkcolor=black,
+	filecolor=magenta,
+	urlcolor=black,
+	bookmarks=true
+}
+
+\urlstyle{mono}
+
+%\renewcommand{\contentsname}{Contenidos}
+%\renewcommand{\figurename}{Figura}
+
+\newcommand{\program}{Go-AI}
+
+\newcommand{\inputtex}[1]{\input{tex/#1}}
+\newcommand{\fref}[1]{Fig.~\ref{#1}}
+%\newcommand{\uurl}[1]{\underline{\url{#1}}}
+
+\begin{document}
+
+\frenchspacing
+
+\title{\program}
+
+\author{Íñigo Gutiérrez Fernández}
+
+\date{}
+
+\maketitle
+
+\begin{abstract}
+	This is the abstract.
+\end{abstract}
+
+\tableofcontents
+
+\inputtex{introduction.tex}
+
+\inputtex{previousWorks.tex}
+
+\inputtex{interface.tex}
+
+\inputtex{implementation.tex}
+
+\printbibliography{}
+
+\end{document}

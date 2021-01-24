@@ -1,0 +1,17 @@
+@startuml
+
+!include ./skinparams.puml
+
+package "SGF" {
+    !include sgflex.pumlc
+    !include sgfyacc.pumlc
+    !include ASTNode.pumlc
+}
+
+!include GameTree.pumlc
+
+sgflex <- sgfyacc
+sgfyacc -> "*" ASTNode
+ASTNode "1" -> "1" GameTree
+
+@enduml
