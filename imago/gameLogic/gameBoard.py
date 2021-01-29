@@ -4,7 +4,7 @@ from copy import deepcopy
 
 from imago.data.enums import Player
 
-def getNewBoard(size):
+def _getNewBoard(size):
     """Return a new board."""
     board = []
     for row in range(size):
@@ -14,9 +14,10 @@ def getNewBoard(size):
     return board
 
 class GameBoard:
+    """Logic and state related to the board."""
 
     def __init__(self, size):
-        self.board = getNewBoard(size)
+        self.board = _getNewBoard(size)
         self.capturesBlack = 0
         self.capturesWhite = 0
         self.lastStone = None
@@ -30,13 +31,16 @@ class GameBoard:
         newBoard.board = deepcopy(self.board)
         return newBoard
 
+    def getGroupLibertiesCount(self, row, col):
+        return len(self.getGroupLiberties(row, col))
+
     def getGroupLiberties(self, row, col):
-        """Returns the empty vertexes adjacent to the group occupying a cell (its
-        liberties) or -1 if the cell is empty.
+        """Returns the empty vertexes adjacent to the group occupying a vertex (its
+        liberties) as a set. An empty set is returned if the vertex is empty.
         """
         groupColor = self.board[row][col]
         if groupColor == Player.EMPTY:
-            return -1
+            return {}
         emptyCells = set()
         exploredCells = set()
         self.__exploreLiberties(row, col, groupColor, emptyCells, exploredCells)
@@ -114,25 +118,25 @@ class GameBoard:
             if (self.board[row-1][col] != player
                 and self.board[row-1][col] != Player.EMPTY
                 and len(self.getGroupLiberties(row-1, col)) == 0):
-                captured += self.captureGroup(row-1, col)
+                captured += self.__captureGroup(row-1, col)
         if row < len(self.board)-1:
             if (self.board[row+1][col] != player
                 and self.board[row+1][col] != Player.EMPTY
                 and len(self.getGroupLiberties(row+1, col)) == 0):
-                captured += self.captureGroup(row+1, col)
+                captured += self.__captureGroup(row+1, col)
         if col > 0:
             if (self.board[row][col-1] != player
                 and self.board[row][col-1] != Player.EMPTY
                 and len(self.getGroupLiberties(row, col-1)) == 0):
-                captured += self.captureGroup(row, col-1)
+                captured += self.__captureGroup(row, col-1)
         if col < len(self.board[0])-1:
             if (self.board[row][col+1] != player
                 and self.board[row][col+1] != Player.EMPTY
                 and len(self.getGroupLiberties(row, col+1)) == 0):
-                captured += self.captureGroup(row, col+1)
+                captured += self.__captureGroup(row, col+1)
         return captured
 
-    def captureGroup(self, row, col):
+    def __captureGroup(self, row, col):
         """Removes all the stones from the group occupying the given cell and returns the
         number of removed stones.
         """
