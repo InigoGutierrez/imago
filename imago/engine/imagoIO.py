@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 """Imago GTP engine input output"""
 
 import sys
