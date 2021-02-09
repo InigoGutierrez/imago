@@ -51,11 +51,7 @@ class GameState:
             return False
 
         # Check ko
-        prevBoards = []
-        checkedMove = self.lastMove
-        while checkedMove is not None:
-            prevBoards.append(checkedMove.board)
-            checkedMove = checkedMove.previousMove
+        prevBoards = self.lastMove.getThisAndPrevBoards()
         if self.getBoard().isMoveKoIllegal(row, col, player, prevBoards):
             print("Invalid move! (Ko)")
             return False
@@ -83,5 +79,5 @@ class GameState:
             raise RuntimeError("Last move of the GameState is None.")
 
         # Add and return the new move
-        self.lastMove = self.lastMove.addMove(player, row, col)
+        self.lastMove = self.lastMove.addMoveForPlayer(row, col, player)
         return self.lastMove

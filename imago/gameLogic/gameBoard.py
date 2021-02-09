@@ -122,31 +122,34 @@ class GameBoard:
         """Checks surrounding captures of a move, removes them and returns a set
         containing the vertices where stones were captured.
         """
+
+        self.board[row][col] = player
+
         captured = set()
 
         if row > 0:
             if (self.board[row-1][col] != player
                 and self.board[row-1][col] != Player.EMPTY
                 and len(self.getGroupLiberties(row-1, col)) == 0):
-                captured.add(self.__captureGroup(row-1, col))
+                captured.update(self.__captureGroup(row-1, col))
 
         if row < self.getBoardHeight()-1:
             if (self.board[row+1][col] != player
                 and self.board[row+1][col] != Player.EMPTY
                 and len(self.getGroupLiberties(row+1, col)) == 0):
-                captured.add(self.__captureGroup(row+1, col))
+                captured.update(self.__captureGroup(row+1, col))
 
         if col > 0:
             if (self.board[row][col-1] != player
                 and self.board[row][col-1] != Player.EMPTY
                 and len(self.getGroupLiberties(row, col-1)) == 0):
-                captured.add(self.__captureGroup(row, col-1))
+                captured.update(self.__captureGroup(row, col-1))
 
         if col < self.getBoardWidth()-1:
             if (self.board[row][col+1] != player
                 and self.board[row][col+1] != Player.EMPTY
                 and len(self.getGroupLiberties(row, col+1)) == 0):
-                captured.add(self.__captureGroup(row, col+1))
+                captured.update(self.__captureGroup(row, col+1))
 
         return captured
 
@@ -174,20 +177,23 @@ class GameBoard:
         if not self.isCellEmpty(row, col):
             raise RuntimeError("Cell to play should be empty when checking for suicide.")
 
-        # Play and capture
+        # Temporarily play and capture
         self.board[row][col] = player
         groupLiberties = self.getGroupLibertiesCount(row, col)
         captured = self.moveAndCapture(row, col, player)
 
+        illegal = False
         # If move didn't capture anything and its group is left without liberties, it's
         # suicidal
         if len(captured) == 0 and groupLiberties == 0:
-            # Restore captured stones
-            for vertex in captured:
-                self.board[vertex[0]][vertex[1]] = Player.otherPlayer(player)
-            self.board[row][col] = Player.EMPTY
-            # Remove played stone
-            return True
+            illegal = True
+
+        # Restore captured stones
+        for vertex in captured:
+            self.board[vertex[0]][vertex[1]] = Player.otherPlayer(player)
+        # Remove temporarily played stone
+        self.board[row][col] = Player.EMPTY
+        return illegal
 
     def isMoveKoIllegal(self, row, col, player, prevBoards):
         """Returns True if move is illegal because of ko."""
@@ -197,8 +203,8 @@ class GameBoard:
             raise RuntimeError("Cell to play should be empty when checking for ko.")
 
         illegal = False
-        # Temporarily place stone to play for comparisons
-        self.board[row][col] = player
+        # Temporarily play and capture for comparisons
+        captured = self.moveAndCapture(row, col, player)
         # Check previous boards
         for prevBoard in prevBoards:
             # A ko is possible in boards where the stone to play exists
@@ -206,7 +212,10 @@ class GameBoard:
                 if self.equals(prevBoard):
                     illegal = True
 
-        # Remove temporarily placed stone
+        # Restore captured stones
+        for vertex in captured:
+            self.board[vertex[0]][vertex[1]] = Player.otherPlayer(player)
+        # Remove temporarily played stone
         self.board[row][col] = Player.EMPTY
         return illegal
 
@@ -219,7 +228,7 @@ class GameBoard:
             return False
         for row in range(self.getBoardHeight()):
             for col in range(self.getBoardWidth()):
-                if self.board[row][col] != otherBoard[row][col]:
+                if self.board[row][col] != otherBoard.board[row][col]:
                     return False
         return True
 
@@ -227,9 +236,13 @@ class GameBoard:
         """Print the board."""
         colTitle = 'A'
         rowTitlePadding = 2
+        if self.getBoardHeight() >= 10:
+            firstRowPadding = 2
+        else:
+            firstRowPadding = 1
 
         # Print column names
-        rowText = " " * (rowTitlePadding + 2)
+        rowText = " " * (rowTitlePadding + firstRowPadding)
         for col in range(self.getBoardWidth()):
             rowText += colTitle + " "
             colTitle = chr(ord(colTitle)+1)
