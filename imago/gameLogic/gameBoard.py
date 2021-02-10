@@ -31,6 +31,12 @@ class GameBoard:
         be the same for all the rows."""
         return len(self.board[0])
 
+    def getLastPlayer(self):
+        """Returns the player who placed the last stone."""
+        if self.lastStone is None:
+            return Player.EMPTY
+        return self.board[self.lastStone[0]][self.lastStone[1]]
+
     def getDeepCopy(self):
         """Returns a copy GameBoard."""
         newBoard = GameBoard(self.getBoardHeight(), self.getBoardWidth())
@@ -124,6 +130,7 @@ class GameBoard:
         """
 
         self.board[row][col] = player
+        self.lastStone = [row, col]
 
         captured = set()
 
@@ -218,6 +225,18 @@ class GameBoard:
         # Remove temporarily played stone
         self.board[row][col] = Player.EMPTY
         return illegal
+
+    def isPlayable(self, row, col, player, prevBoards):
+        """Determines if a move is playable."""
+        if not self.isMoveInBoardBounds(row, col):
+            return False, "Move outside board bounds."
+        if not self.isCellEmpty(row, col):
+            return False, "Vertex is not empty."
+        if self.isMoveSuicidal(row, col, player):
+            return False, "Move is suicidal."
+        if self.isMoveKoIllegal(row, col, player, prevBoards):
+            return False, "Illegal by ko rule."
+        return True, ""
 
     def equals(self, otherBoard):
         """Returns true if this board is equal to another board. Only takes into account

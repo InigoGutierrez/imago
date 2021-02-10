@@ -19,9 +19,9 @@ class GameState:
         """Gets the player who should make the next move."""
         if self.lastMove is None:
             return Player.BLACK
-        if self.lastMove.player is Player.EMPTY:
+        if self.lastMove.getLastPlayer() is Player.EMPTY:
             return Player.BLACK
-        return Player.otherPlayer(self.lastMove.player)
+        return Player.otherPlayer(self.lastMove.getLastPlayer())
 
     def getPlayerCode(self):
         """Gets a string representation of the current player."""
@@ -40,37 +40,17 @@ class GameState:
     def playMoveForPlayer(self, row, col, player):
         """Execute a move on the board for the given player."""
 
-        # Check valid move
-        if not self.prevalidateMove(row, col):
-            print("Invalid move!")
-            return False
-
-        # Check suicide
-        if self.getBoard().isMoveSuicidal(row, col, player):
-            print("Invalid move! (Suicide)")
-            return False
-
-        # Check ko
         prevBoards = self.lastMove.getThisAndPrevBoards()
-        if self.getBoard().isMoveKoIllegal(row, col, player, prevBoards):
-            print("Invalid move! (Ko)")
-            return False
-
-        # Move is legal
-        self.__addMove(player, row, col)
-        return True
+        playable, message = self.lastMove.board.isPlayable(row, col, player, prevBoards)
+        if playable:
+            self.__addMove(player, row, col)
+            return True
+        print("Invalid Move! %s" % message)
+        return False
 
     def undo(self):
         """Sets the move before the last move as the new last move."""
         self.lastMove = self.lastMove.previousMove
-
-    def prevalidateMove(self, row, col):
-        """Returns True if move is inside bounds and cell is empty, False if not."""
-        if not self.getBoard().isMoveInBoardBounds(row, col):
-            return False
-        if not self.getBoard().isCellEmpty(row, col):
-            return False
-        return True
 
     def __addMove(self, player, row, col):
 

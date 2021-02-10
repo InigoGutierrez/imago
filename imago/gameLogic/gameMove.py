@@ -8,7 +8,6 @@ class GameMove:
     removed stones."""
 
     def __init__(self, player, board):
-        self.player = player
         self.board = board
         self.nextMoves = []
         self.previousMove = None
@@ -21,6 +20,10 @@ class GameMove:
         """Returns the column of the vertex the move was played on."""
         return self.board.lastStone[1]
 
+    def getLastPlayer(self):
+        """Returns the player who placed the last stone."""
+        return self.board.getLastPlayer()
+
     def getThisAndPrevBoards(self):
         """Returns an array with all the boards of this and previous moves."""
         prevBoards = []
@@ -30,14 +33,24 @@ class GameMove:
             checkedMove = checkedMove.previousMove
         return prevBoards
 
+    def getPlayableVertices(self):
+        """Returns a set with the playable vertices."""
+        playables = set()
+        player = Player.otherPlayer(self.getLastPlayer())
+        prevBoards = self.getThisAndPrevBoards()
+        for row in range(self.board.getBoardHeight()):
+            for col in range(self.board.getBoardWidth()):
+                if self.board.isPlayable(row, col, player, prevBoards):
+                    playables.add((row, col))
+
     def addMove(self, row, col):
         """Adds a move to the next moves list creating its board from this move's board
         plus a new stone at the specified row and column.
         """
-        if self.player == Player.EMPTY:
+        if self.getLastPlayer() == Player.EMPTY:
             player = Player.BLACK
         else:
-            player = Player.otherPlayer(self.player)
+            player = Player.otherPlayer(self.getLastPlayer())
         return self.addMoveForPlayer(row, col, player)
 
     def addMoveForPlayer(self, row, col, player):
