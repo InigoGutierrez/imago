@@ -20,7 +20,10 @@ class GameBoard:
         self.board = _getNewBoard(height, width)
         self.capturesBlack = 0
         self.capturesWhite = 0
-        self.lastStone = None
+
+    def getBoard(self):
+        """Gets the matrix representing the board."""
+        return self.board
 
     def getBoardHeight(self):
         """Returns the number of rows in the board."""
@@ -31,27 +34,16 @@ class GameBoard:
         be the same for all the rows."""
         return len(self.board[0])
 
-    def getLastPlayer(self):
-        """Returns the player who placed the last stone."""
-        if self.lastStone is None:
-            return Player.EMPTY
-        return self.board[self.lastStone[0]][self.lastStone[1]]
-
     def getDeepCopy(self):
         """Returns a copy GameBoard."""
         newBoard = GameBoard(self.getBoardHeight(), self.getBoardWidth())
         newBoard.capturesBlack = self.capturesBlack
         newBoard.capturesWhite = self.capturesWhite
-        newBoard.lastStone = self.lastStone
         newBoard.board = deepcopy(self.board)
         return newBoard
 
-    def getGroupLibertiesCount(self, row, col):
-        """Returns the number of liberties of a group."""
-        return len(self.getGroupLiberties(row, col))
-
     def getGroupLiberties(self, row, col):
-        """Returns the empty vertexes adjacent to the group occupying a vertex (its
+        """Returns the empty vertices adjacent to the group occupying a vertex (its
         liberties) as a set. An empty set is returned if the vertex is empty.
         """
         groupColor = self.board[row][col]
@@ -61,6 +53,10 @@ class GameBoard:
         exploredCells = set()
         self.__exploreLiberties(row, col, groupColor, emptyCells, exploredCells)
         return emptyCells
+
+    def getGroupLibertiesCount(self, row, col):
+        """Returns the number of liberties of a group."""
+        return len(self.getGroupLiberties(row, col))
 
     def __exploreLiberties(self, row, col, groupColor, emptyCells, exploredCells):
         """Adds surrounding empty cells to array if they have not been added yet
@@ -78,51 +74,36 @@ class GameBoard:
                 emptyCells.add((row, col))
             return
 
-        # Up
-        if row > 0:
-            self.__exploreLiberties(row-1, col, groupColor, emptyCells, exploredCells)
-
-        # Right
-        if col < self.getBoardWidth()-1:
-            self.__exploreLiberties(row, col+1, groupColor, emptyCells, exploredCells)
-
-        # Down
-        if row < self.getBoardHeight()-1:
-            self.__exploreLiberties(row+1, col, groupColor, emptyCells, exploredCells)
-
-        # Left
-        if col > 0:
-            self.__exploreLiberties(row, col-1, groupColor, emptyCells, exploredCells)
+        for side in ((-1,0), (1,0), (0,-1), (0,1)):
+            rowToExplore = row + side[0]
+            colToExplore = col + side[1]
+            if self.isMoveInBoardBounds(rowToExplore, colToExplore):
+                self.__exploreLiberties(rowToExplore, colToExplore, groupColor,
+                                        emptyCells, exploredCells)
 
     def getGroupCells(self, row, col):
-        """Returns a set containing the cells occupied by the group in the given cell."""
+        """
+        Returns a set containing the cells occupied by the group in the given cell.
+        This is also valid if the cell is empty."""
         groupColor = self.board[row][col]
-        if groupColor == Player.EMPTY:
-            return 0
         cells = set()
         self.__exploreGroup(row, col, groupColor, cells)
         return cells
+
+    def getGroupCellsCount(self, row, col):
+        """Returns the number of cells of a group."""
+        return len(self.getGroupCells(row, col))
 
     def __exploreGroup(self, row, col, groupColor, cells):
         if self.board[row][col] != groupColor or (row, col) in cells:
             return
         cells.add((row, col))
 
-        # Up
-        if row > 0:
-            self.__exploreGroup(row-1, col, groupColor, cells)
-
-        # Right
-        if col < self.getBoardWidth()-1:
-            self.__exploreGroup(row, col+1, groupColor, cells)
-
-        # Down
-        if row < self.getBoardHeight()-1:
-            self.__exploreGroup(row+1, col, groupColor, cells)
-
-        # Left
-        if col > 0:
-            self.__exploreGroup(row, col-1, groupColor, cells)
+        for side in ((-1,0), (1,0), (0,-1), (0,1)):
+            rowToExplore = row + side[0]
+            colToExplore = col + side[1]
+            if self.isMoveInBoardBounds(rowToExplore, colToExplore):
+                self.__exploreGroup(rowToExplore, colToExplore, groupColor, cells)
 
     def moveAndCapture(self, row, col, player):
         """Checks surrounding captures of a move, removes them and returns a set
@@ -130,33 +111,17 @@ class GameBoard:
         """
 
         self.board[row][col] = player
-        self.lastStone = [row, col]
 
         captured = set()
 
-        if row > 0:
-            if (self.board[row-1][col] != player
-                and self.board[row-1][col] != Player.EMPTY
-                and len(self.getGroupLiberties(row-1, col)) == 0):
-                captured.update(self.__captureGroup(row-1, col))
-
-        if row < self.getBoardHeight()-1:
-            if (self.board[row+1][col] != player
-                and self.board[row+1][col] != Player.EMPTY
-                and len(self.getGroupLiberties(row+1, col)) == 0):
-                captured.update(self.__captureGroup(row+1, col))
-
-        if col > 0:
-            if (self.board[row][col-1] != player
-                and self.board[row][col-1] != Player.EMPTY
-                and len(self.getGroupLiberties(row, col-1)) == 0):
-                captured.update(self.__captureGroup(row, col-1))
-
-        if col < self.getBoardWidth()-1:
-            if (self.board[row][col+1] != player
-                and self.board[row][col+1] != Player.EMPTY
-                and len(self.getGroupLiberties(row, col+1)) == 0):
-                captured.update(self.__captureGroup(row, col+1))
+        for side in ((-1,0), (1,0), (0,-1), (0,1)):
+            rowToExplore = row + side[0]
+            colToExplore = col + side[1]
+            if self.isMoveInBoardBounds(rowToExplore, colToExplore):
+                if (self.board[rowToExplore][colToExplore] != player
+                    and self.board[rowToExplore][colToExplore] != Player.EMPTY
+                    and self.getGroupLibertiesCount(rowToExplore, colToExplore) == 0):
+                    captured.update(self.__captureGroup(rowToExplore, colToExplore))
 
         return captured
 
@@ -176,6 +141,29 @@ class GameBoard:
     def isCellEmpty(self, row, col):
         """Returns True if cell is empty, false otherwise."""
         return self.board[row][col] == Player.EMPTY
+
+    def isCellEye(self, row, col):
+        """Returns the surrounding color if the cell is part of an eye and Player.EMTPY
+        otherwise.
+        """
+        # if isCellEmpty && all adjacent to group are same color
+        if not self.isCellEmpty(row, col):
+            return Player.EMPTY
+        groupCells = self.getGroupCells(row, col)
+        surroundingColor = Player.EMPTY
+        # Check surrounding cells of each cell in the group
+        for cell in groupCells:
+            for side in ((-1,0), (1,0), (0,-1), (0,1)):
+                rowChecked = cell[0]+side[0]
+                colChecked = cell[1]+side[1]
+                if self.isMoveInBoardBounds(rowChecked, colChecked):
+                    otherColor = self.board[rowChecked][colChecked]
+                    if otherColor != Player.EMPTY:
+                        if surroundingColor == Player.EMPTY:
+                            surroundingColor = otherColor
+                        elif surroundingColor != otherColor:
+                            return Player.EMPTY
+        return surroundingColor
 
     def isMoveSuicidal(self, row, col, player):
         """Returns True if move is suicidal."""
@@ -237,6 +225,26 @@ class GameBoard:
         if self.isMoveKoIllegal(row, col, player, prevBoards):
             return False, "Illegal by ko rule."
         return True, ""
+
+    def score(self):
+        """Gets the current score given by the already surrounded territory for Japanese
+        rules. The format of the returned score is (black, white).
+        """
+        scores = []
+        for player in Player:
+            while len(scores) <= player.value:
+                scores.append(0)
+        checkedVertices = set()
+        for row in range(0, self.getBoardHeight()):
+            for col in range(0, self.getBoardWidth()):
+                if not (row, col) in checkedVertices:
+                    group = self.getGroupCells(row, col)
+                    for cell in group:
+                        checkedVertices.add(cell)
+                    surroundingColor = self.isCellEye(row, col)
+                    if surroundingColor != Player.EMPTY:
+                        scores[surroundingColor.value] += len(group)
+        return (scores[Player.BLACK.value], scores[Player.WHITE.value])
 
     def equals(self, otherBoard):
         """Returns true if this board is equal to another board. Only takes into account

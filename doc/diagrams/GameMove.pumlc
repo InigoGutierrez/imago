@@ -1,13 +1,23 @@
 @startuml
 
 class GameMove {
-    int player
-    int row
-    int col
-    int[2] makesKo
-    int[] board
+    GameBoard board
     GameMove[] nextMoves
     GameMove previousMove
+    boolean isPass
+    int[2] coords
+
+    getRow(self)
+    getCol(self)
+    getPlayer(self)
+    getNextPlayer(self)
+    getGameLength(self)
+    getThisAndPrevBoards(self)
+    getPlayableVertices(self)
+    addMove(self, row, col)
+    addMoveForPlayer(self, row, col, player)
+    addPass(self)
+    printBoard(self)
 }
 
 @enduml

@@ -1,14 +1,18 @@
 @startuml
 
 class GameState {
-    int player
-    int capturesBlack
-    int capturesWhite
-    List board
-    List prevBoards # for ko
+    int size
     GameTree gameTree
     GameMove lastMove
-    GameData gameData
+    'GameData gameData
+
+    getCurrentPlayer(self)
+    getPlayerCode(self)
+    getBoard(self)
+    playMove(self, row, col)
+    playMoveForPlayer(self, row, col, player)
+    playPass(self)
+    undo(self)
 }
 
 @enduml

@@ -1,0 +1,28 @@
+@startuml
+
+class GameBoard {
+    int[][] board
+    int capturesBlack
+    int capturesWhite
+
+    getBoard(self)
+    getBoardHeight(self)
+    getBoardWidth(self)
+    getDeepCopy(self)
+    getGroupLiberties(self, row, col)
+    getGroupLibertiesCount(self, row, col)
+    getGroupCells(self, row, col)
+    getGroupCellsCount(self, row, col)
+    moveAndCapture(self, row, col, player)
+    isMoveInBoardBounds(self, row, col)
+    isCellEmpty(self, row, col)
+    isCellEye(self, row, col)
+    isMoveSuicidal(self, row, col, player)
+    isMoveKoIllegal(self, row, col, player, prevBoards)
+    isPlayable(self, row, col, player, prevBoards)
+    score(self)
+    equals(self, otherBoard)
+    printBoard(self)
+}
+
+@enduml

@@ -5,10 +5,13 @@
 !include GameState.pumlc
 !include GameTree.pumlc
 !include GameMove.pumlc
+!include GameBoard.pumlc
 
-GameState --> GameTree
-GameState --> GameMove: Current move
+GameState -> GameTree
+GameState --> GameMove: Last move
 GameTree *--> GameMove
-GameMove -> GameMove
+GameMove --> GameMove: Previous move
+GameMove *--> GameMove: Next moves
+GameBoard <- GameMove
 
 @enduml

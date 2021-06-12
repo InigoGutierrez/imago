@@ -5,7 +5,7 @@ from random import randrange
 from imago.data.enums import Player
 from imago.gameLogic.gameState import GameState
 
-DEF_SIZE = 19
+DEF_SIZE = 7
 DEF_KOMI = 5.5
 
 class GameEngine:
@@ -33,7 +33,7 @@ class GameEngine:
         self.komi = komi
 
     def setFixedHandicap(self, stones):
-        """Sets handicap stones in fixed vertexes."""
+        """Sets handicap stones in fixed vertices."""
         if stones < 1 or stones > 9:
             raise Exception("Wrong number of handicap stones")
         # TODO: Set handicap stones
@@ -41,22 +41,35 @@ class GameEngine:
 
     def play(self, color, vertex):
         """Plays in the vertex passed as argument"""
+        if vertex == "pass":
+            self.gameState.passForPlayer(color)
+            return
         row = vertex[0]
         col = vertex[1]
         self.gameState.playMoveForPlayer(row, col, color)
 
     def genmove(self, color):
         """The key of this TFG."""
+
+        # Get valid vertices to play at
         validCells = []
         board = self.gameState.getBoard().board
         size = self.gameState.size
         for row in range(size):
             for col in range(size):
                 if board[row][col] == Player.EMPTY:
-                    validCells.append([row, col])
+                    # Don't play on eyes!
+                    if ( self.gameState.getBoard().getGroupCellsCount(row, col) != 1
+                        and self.gameState.getBoard().isCellEye(row, col) == Player.EMPTY ):
+                        validCells.append([row, col])
+        # Pass if no valid vertices
+        # Select a random vertex
         randIndex = randrange(0, len(validCells))
         move = validCells[randIndex]
         self.gameState.playMoveForPlayer(move[0], move[1], color)
+        # NOTA: Esto usa gameState para hacer play, y en monteCarlo.py se usa GameMove
+        # para hacer add. Incoherente. Idealmente monteCarlo.py usaría un GameState en vez
+        # de acceder a los GameMove y gestionar un árbol...
         return move
 
     def undo(self):

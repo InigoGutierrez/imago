@@ -12,16 +12,16 @@ class GameState:
         self.size = size
         self.gameTree = GameTree()
         newBoard = GameBoard(self.size, self.size)
-        self.lastMove = GameMove(Player.EMPTY, newBoard)
+        self.lastMove = GameMove(newBoard)
         self.gameTree.firstMoves.append(self.lastMove)
 
     def getCurrentPlayer(self):
         """Gets the player who should make the next move."""
         if self.lastMove is None:
             return Player.BLACK
-        if self.lastMove.getLastPlayer() is Player.EMPTY:
+        if self.lastMove.getPlayer() is Player.EMPTY:
             return Player.BLACK
-        return Player.otherPlayer(self.lastMove.getLastPlayer())
+        return Player.otherPlayer(self.lastMove.getPlayer())
 
     def getPlayerCode(self):
         """Gets a string representation of the current player."""
@@ -47,6 +47,10 @@ class GameState:
             return True
         print("Invalid Move! %s" % message)
         return False
+
+    def playPass(self):
+        """Passes the turn for the given player."""
+        self.lastMove.addPass()
 
     def undo(self):
         """Sets the move before the last move as the new last move."""

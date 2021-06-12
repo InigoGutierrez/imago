@@ -7,8 +7,8 @@ from imago.gameLogic.gameState import GameState
 
 if __name__ == "__main__":
 
-    #GAMESTATE = GameState(5)
-    GAMESTATE = GameState(19)
+    GAMESTATE = GameState(5)
+    #GAMESTATE = GameState(19)
 
     while 1:
 

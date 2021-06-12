@@ -2,11 +2,18 @@
 
 !include skinparams.puml
 
-class EngineCore {
-}
-
 class IO {
     processComand()
+}
+
+class EngineCore {
+    setBoardsize()
+    clearBoard()
+    setKomi()
+    setFixedHandicap()
+    play()
+    genmove()
+    undo()
 }
 
 !include GameState.pumlc
@@ -22,7 +29,7 @@ class EngineAI {
     genmove(board)
 }
 
-EngineCore --> IO
+IO --> EngineCore
 EngineCore --> GameState
 EngineCore --> EngineAI
 

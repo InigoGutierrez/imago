@@ -1,8 +1,8 @@
 @startuml
 
 class GameTree {
-    GameNode[] firstMoves
-	GameData gameData
+    GameMove[] firstMoves
+    'GameData gameData
 }
 
 @enduml

@@ -21,7 +21,7 @@ class ParseCodes(Enum):
     QUIT = enumAuto()
 
 def parseMove(args, boardsize):
-    """Converts the textual input of a move to a move instance."""
+    """Converts the textual representation of a move to a move instance."""
     if len(args) != 2:
         print("[ERROR] - Wrong n of args for move")
         return ParseCodes.ERROR
@@ -40,7 +40,8 @@ def parseColor(text):
     return ParseCodes.ERROR
 
 def parseVertex(text, boardSize):
-    """Returns row and column of a vertex given its input string.
+    """Returns row and column of a vertex given its input string. A vertex can also be the
+    string "pass".
 
     GTP uses A1 style notation: columns are letters left to right, rows are number bottom
     to top.
@@ -48,6 +49,8 @@ def parseVertex(text, boardSize):
     text = text.upper()
 
     if not re.match("^[A-HJ-Z][1-9][0-9]*$", text):
+        if text == "PASS":
+            return "pass"
         return ParseCodes.ERROR
 
     vertexCol = ord(text[0])
@@ -70,6 +73,8 @@ def vertexToString(vertex, boardSize):
     GTP uses A1 style notation: columns are letters left to right, rows are number bottom
     to top.
     """
+    if vertex == "pass":
+        return "pass"
     if len(vertex) != 2:
         return ParseCodes.ERROR
     if vertex[0] >= boardSize or vertex[1] >= boardSize or vertex[0] < 0 or vertex[1] < 0:
