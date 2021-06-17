@@ -3,6 +3,7 @@
 from random import randrange
 
 from imago.data.enums import Player
+from imago.engine.monteCarlo import MCTS
 from imago.gameLogic.gameState import GameState
 
 DEF_SIZE = 7
@@ -14,6 +15,7 @@ class GameEngine:
     def __init__(self):
         self.komi = DEF_KOMI
         self.gameState = GameState(DEF_SIZE)
+        self.mcts = MCTS(self.gameState.lastMove)
 
     def setBoardsize(self, newSize):
         """Changes the size of the board.
@@ -47,30 +49,15 @@ class GameEngine:
         row = vertex[0]
         col = vertex[1]
         self.gameState.playMoveForPlayer(row, col, color)
+        self.mcts.forceNextMove(vertex)
 
     def genmove(self, color):
-        """The key of this TFG."""
-
-        # Get valid vertices to play at
-        validCells = []
-        board = self.gameState.getBoard().board
-        size = self.gameState.size
-        for row in range(size):
-            for col in range(size):
-                if board[row][col] == Player.EMPTY:
-                    # Don't play on eyes!
-                    if ( self.gameState.getBoard().getGroupCellsCount(row, col) != 1
-                        and self.gameState.getBoard().isCellEye(row, col) == Player.EMPTY ):
-                        validCells.append([row, col])
-        # Pass if no valid vertices
-        # Select a random vertex
-        randIndex = randrange(0, len(validCells))
-        move = validCells[randIndex]
-        self.gameState.playMoveForPlayer(move[0], move[1], color)
-        # NOTA: Esto usa gameState para hacer play, y en monteCarlo.py se usa GameMove
-        # para hacer add. Incoherente. Idealmente monteCarlo.py usaría un GameState en vez
-        # de acceder a los GameMove y gestionar un árbol...
-        return move
+        """Returns a list representing coordinates of the board in the form (row, col)."""
+        coords = self.mcts.pickMove().coords
+        #TODO: The move should NOT be played in its generation. This method is just for
+        #suggesting a move.
+        self.gameState.playMoveForPlayer(coords[0], coords[1], color)
+        return coords
 
     def undo(self):
         """The board configuration and number of captured stones are reset to the state

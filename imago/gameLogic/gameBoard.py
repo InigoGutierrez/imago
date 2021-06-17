@@ -226,6 +226,16 @@ class GameBoard:
             return False, "Illegal by ko rule."
         return True, ""
 
+    def isSensible(self, row, col, player, prevBoards):
+        """Determines if a move is playable and sensible."""
+        playable, playableText = self.isPlayable(row, col, player, prevBoards)
+        if not playable:
+            return playable, playableText
+        if ( self.getGroupCellsCount(row, col) == 1
+            and self.isCellEye(row, col) == player ):
+            return False, "Move fills own eye."""
+        return True, ""
+
     def score(self):
         """Gets the current score given by the already surrounded territory for Japanese
         rules. The format of the returned score is (black, white).

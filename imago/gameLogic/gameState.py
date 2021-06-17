@@ -49,8 +49,12 @@ class GameState:
         return False
 
     def playPass(self):
-        """Passes the turn for the given player."""
+        """Passes the turn for the player who should make a move."""
         self.lastMove.addPass()
+
+    def passForPlayer(self, player):
+        """Passes the turn for the given player."""
+        self.lastMove.addPassForPlayer(player)
 
     def undo(self):
         """Sets the move before the last move as the new last move."""
