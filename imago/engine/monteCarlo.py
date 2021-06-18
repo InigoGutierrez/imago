@@ -45,6 +45,11 @@ class MCTS:
 
         return bestNode
 
+    def clearBoard(self):
+        """Empties move history."""
+        while self.root.parent is not None:
+            self.root = self.root.parent
+
 class MCTSNode:
     """Monte Carlo tree node."""
 

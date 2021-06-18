@@ -10,10 +10,7 @@ class GameState:
 
     def __init__(self, size):
         self.size = size
-        self.gameTree = GameTree()
-        newBoard = GameBoard(self.size, self.size)
-        self.lastMove = GameMove(newBoard)
-        self.gameTree.firstMoves.append(self.lastMove)
+        self.clearBoard()
 
     def getCurrentPlayer(self):
         """Gets the player who should make the next move."""
@@ -32,6 +29,13 @@ class GameState:
         if self.lastMove is None:
             return GameBoard(self.size, self.size)
         return self.lastMove.board
+
+    def clearBoard(self):
+        """Empties the board and moves tree."""
+        self.gameTree = GameTree()
+        newBoard = GameBoard(self.size, self.size)
+        self.lastMove = GameMove(newBoard)
+        self.gameTree.firstMoves.append(self.lastMove)
 
     def playMove(self, row, col):
         """Execute a move on the board for the current player and switches players."""

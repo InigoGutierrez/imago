@@ -1,8 +1,5 @@
 """Imago GTP engine"""
 
-from random import randrange
-
-from imago.data.enums import Player
 from imago.engine.monteCarlo import MCTS
 from imago.gameLogic.gameState import GameState
 
@@ -23,12 +20,14 @@ class GameEngine:
         It is wise to call clear_board after this command.
         """
         self.gameState = GameState(newSize)
+        self.mcts = MCTS(self.gameState.lastMove)
 
     def clearBoard(self):
         """The board is cleared, the number of captured stones reset to zero and the move
         history reset to empty.
         """
         self.gameState.clearBoard()
+        self.mcts.clearBoard()
 
     def setKomi(self, komi):
         """Sets a new value of komi."""
@@ -56,7 +55,7 @@ class GameEngine:
         coords = self.mcts.pickMove().coords
         #TODO: The move should NOT be played in its generation. This method is just for
         #suggesting a move.
-        self.gameState.playMoveForPlayer(coords[0], coords[1], color)
+        #self.gameState.playMoveForPlayer(coords[0], coords[1], color)
         return coords
 
     def undo(self):

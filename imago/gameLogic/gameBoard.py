@@ -110,6 +110,10 @@ class GameBoard:
         containing the vertices where stones were captured.
         """
 
+        if (row < 0 or row >= self.getBoardHeight()
+                or col < 0 or col >= self.getBoardWidth()):
+            print("[ERROR] Move and capture: out of bounds (%d, %d)" % (row, col))
+
         self.board[row][col] = player
 
         captured = set()

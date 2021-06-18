@@ -5,17 +5,21 @@ import sys
 from imago.engine import parseHelpers
 from imago.engine.core import GameEngine
 
+def _response(text=""):
+    print("= %s" % text)
+    print()
+
 def protocol_version(_):
     """Version of the GTP Protocol"""
-    print("2")
+    _response("2")
 
 def name(_):
     """Name of the engine"""
-    print("Imago")
+    _response("Imago")
 
 def version(_):
     """Version of the engine"""
-    print("0.0.0")
+    _response("0.0.0")
 
 def getCoordsText(row, col):
     """Returns a string representation of row and col.
@@ -75,12 +79,14 @@ class ImagoIO:
         for c in self.commands_set:
             if c.__name__ == args[0]:
                 out = "true"
-        print(out)
+        _response(out)
 
     def list_commands(self, _):
         """List of commands, one per row"""
+        output = ""
         for c in self.commands_set:
-            print("%s - %s" % (c.__name__, c.__doc__))
+            output += ("%s - %s\n" % (c.__name__, c.__doc__))
+        _response(output)
 
     def boardsize(self, args):
         """Changes the size of the board.
@@ -92,12 +98,14 @@ class ImagoIO:
             sys.exit(1)
         size = int(args[0])
         self.gameEngine.setBoardsize(size)
+        _response()
 
     def clear_board(self, _):
         """The board is cleared, the number of captured stones reset to zero and the move
         history reset to empty.
         """
         self.gameEngine.clearBoard()
+        _response()
 
     def komi(self, args):
         """Sets a new value of komi."""
@@ -106,6 +114,7 @@ class ImagoIO:
             sys.exit(1)
         komi = float(args[0])
         self.gameEngine.setKomi(komi)
+        _response()
 
     def fixed_handicap(self, args):
         """Handicap stones are placed on the board on standard vertices.
@@ -119,7 +128,7 @@ class ImagoIO:
         out = getCoordsText(vertices[0][0], vertices[0][1])
         for vertex in vertices[1:]:
             out += " " + getCoordsText(vertex[0], vertex[1])
-        print(out)
+        _response(out)
 
     def place_free_handicap(self, args):
         """Handicap stones are placed on the board by the AI criteria."""
@@ -136,6 +145,7 @@ class ImagoIO:
             sys.exit(1)
         move = parseHelpers.parseMove(args, self.gameEngine.gameState.size)
         self.gameEngine.play(move.color, move.vertex)
+        _response()
 
     def genmove(self, args):
         """A stone of the requested color is played where the engine chooses."""
@@ -145,7 +155,7 @@ class ImagoIO:
         color = parseHelpers.parseColor(args[0])
         output = parseHelpers.vertexToString(self.gameEngine.genmove(color),
                 self.gameEngine.gameState.size)
-        print(output)
+        _response(output)
         self.gameEngine.gameState.getBoard().printBoard()
 
     def undo(self, _):
