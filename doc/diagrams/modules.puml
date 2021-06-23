@@ -1,6 +1,6 @@
 @startuml
 
-!include ./skinparams.puml
+!include skinparams.puml
 
 !include GameState.pumlc
 !include SGF.pumlc

@@ -5,27 +5,24 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{csquotes}
+\usepackage{enumitem}
 
 \usepackage[backend=biber, style=numeric-comp]{biblatex}
-\addbibresource{/home/taamas/docs/biber.bib}
+\addbibresource{tex/biber.bib}
 
 \geometry{left=4.5cm,top=2cm,bottom=2cm,right=4.5cm}
 
-\hypersetup{colorlinks=true,
+\hypersetup{colorlinks=false,
 	linkcolor=black,
-	filecolor=magenta,
+	filecolor=black,
 	urlcolor=black,
 	bookmarks=true
 }
 
 \urlstyle{mono}
 
-%\renewcommand{\contentsname}{Contenidos}
-%\renewcommand{\figurename}{Figura}
-
 \newcommand{\program}{Imago}
 
-\newcommand{\inputtex}[1]{\input{tex/#1}}
 \newcommand{\fref}[1]{Fig.~\ref{#1}}
 %\newcommand{\uurl}[1]{\underline{\url{#1}}}
 
@@ -45,15 +42,70 @@
 	This is the abstract.
 \end{abstract}
 
+\clearpage
+
+\section*{Acknowledgements}
+
+TODO: Acknowledgements
+
+To Vicente García Díaz, for directing me in this project.
+
+To José Manuel Redondo López\cite{plantillaRedondo}, for making a very
+complete template on which the structure of this documentation is extensively
+based.
+
+\clearpage
+
+\section*{Copyright notice}
+
+\begin{displayquote}
+
+	Copyright (C) 2021 \textbf{ÍÑIGO GUTIÉRREZ FERNÁNDEZ}.
+
+	\textit{Permission is granted to copy, distribute and/or modify this
+	document under the terms of the GNU Free Documentation License, Version 1.3
+	or any later version published by the Free Software Foundation; with the
+	Copyright notice as an Invariant Section, no Front- Cover Texts, and no
+	Back-Cover Texts.  A copy of  the license  is  included in  the  section
+	entitled ``GNU Free Documentation License''.}
+
+\end{displayquote}
+
+Although this document uses the GNU Free Documentation License to keep its
+contained information free, bear in mind that it isn't software documentation or
+a manual or guide of any kind, and serves just as the documentation for the
+author's Degree's Final Project.
+
+This document is based on a template by José Manuel Redondo López, associate
+professor of the University of Oviedo. The copyright notice he asks for
+inclusion to use this template is included here.
+
+\begin{displayquote}
+
+	Copyright (C) 2019 \textbf{JOSÉ MANUEL REDONDO LÓPEZ}.\cite{plantillaRedondo}
+
+	\textit{Permission is granted to copy, distribute and/or modify this
+	document under the terms of the GNU Free Documentation License, Version 1.3
+	or any later version published by the Free Software Foundation; with no
+	Invariant Sections, no Front- Cover Texts, and no Back-Cover Texts.  A  copy
+	of  the license  is  included in  the  section entitled ``GNU  Free
+	Documentation License''.}
+
+\end{displayquote}
+
+\clearpage
+
 \tableofcontents
 
-\inputtex{introduction.tex}
+\input{tex/introduction.tex}
 
-\inputtex{previousWorks.tex}
+\input{tex/planification.tex}
 
-\inputtex{interface.tex}
+\input{tex/systemAnalysis.tex}
 
-\inputtex{implementation.tex}
+%\input{tex/interface.tex}
+
+%\input{tex/implementation.tex}
 
 \printbibliography{}
 

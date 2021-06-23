@@ -1,0 +1,200 @@
+\section{System Analysis}
+
+%\subsection{System reach determination}
+
+\subsection{System Requirements}
+
+The requirements for the system are expressed here in a nested list way, each of
+them with a textual and numeric reference so they are traceable. The functional
+requirements are exposed first, followed by the other kinds of requisites needed
+for the system.
+
+\setlist[enumerate,2]{label*=\arabic*.}
+\setlist[enumerate,3]{label*=\arabic*.}
+
+\subsubsection{Functional Requirements}
+
+\paragraph{Game Requirements}
+
+\setlist[enumerate,1]{label=FRG \arabic*.}
+
+\begin{enumerate}
+
+	\item The state of the board can be shown to the user.
+		\begin{enumerate}
+			\item A text representation of each cell is printed.
+				\begin{enumerate}
+					\item A different character is used for each different state
+						of a cell.
+				\end{enumerate}
+			\item The coordinates system is shown around the board.
+				\begin{enumerate}
+					\item Columns are shown as capital letters left to right
+						starting with ``A'' and skipping ``I''.
+					\item Rows are shown as numbers starting with 1 on the
+						lowest row and increasing upwards.
+				\end{enumerate}
+		\end{enumerate}
+
+	\item Movements can be introduced to be played on the board.
+		\begin{enumerate}
+			\item A move is introduced as the textual representation of the
+				coordinates of the vertex to play on or as ``pass''.
+				\begin{enumerate}
+					\item The text introduced for the move must follow the
+						regular expression \texttt{([A-Z][0-9]+|pass)}
+					\item If the move is not valid, it must be notified to the
+						user and another move asked for.
+				\end{enumerate}
+		\end{enumerate}
+
+	\item The board will behave according to the Japanese rules of Go.
+
+\end{enumerate}
+
+\paragraph{Engine Requirements}
+
+\setlist[enumerate,1]{label=FRE \arabic*.}
+
+\begin{enumerate}
+
+	\item Coordinates of the board representing valid moves must be printed.
+
+\end{enumerate}
+
+%\subsubsection{Security Requirements}
+%
+%\setlist[enumerate,1]{label=SR \arabic*.}
+
+\subsubsection{Usability Requirements}
+
+\setlist[enumerate,1]{label=UR \arabic*.}
+
+\begin{enumerate}
+
+	\item The engine executable will include a help option with the different
+		modes of execution.
+
+\end{enumerate}
+
+\subsubsection{User Requirements}
+
+\setlist[enumerate,1]{label=USR \arabic*.}
+
+\begin{enumerate}
+
+	\item For understanding the workings of the application the user needs to be
+		familiar with the basics of the game of Go.
+
+	\item For directly using the engine the user needs to be familiar with
+		command line interfaces.
+
+\end{enumerate}
+
+\subsubsection{Technological Requirements}
+
+\setlist[enumerate,1]{label=TR \arabic*.}
+
+\begin{enumerate}
+
+	\item The game program will be a python file able to be executed by the
+		python interpreter.
+
+	\item The program will make use of standard input and standard output for
+		communication.
+		\begin{enumerate}
+			\item Standard input will be used for reading moves.
+			\item Standard output will be used for showing the board and for
+				messages directed to the user.
+		\end{enumerate}
+
+\end{enumerate}
+
+\subsubsection{Response Time Requirements}
+
+\setlist[enumerate,1]{label=RTR \arabic*.}
+
+\begin{enumerate}
+
+	\item The maximum thinking time of the engine will be configurable.
+		\begin{enumerate}
+			\item It will be possible to pass the maximum time as a launch
+				argument.
+			\item It will be possible to store the maximum time as a setting
+				in a configuration file
+		\end{enumerate}
+
+\end{enumerate}
+
+
+\setlist[enumerate,1]{label=\arabic*.}
+
+\subsection{System Actors}
+
+There are various actors who will interact with the system, both human and
+non-human.
+
+\begin{itemize}
+
+	\item The human player who interacts with the playing interface.
+	\item The human user who interacts with the engine.
+	\item A GUI software which uses the engine to generate moves.
+
+\end{itemize}
+
+\subsection{Use Cases}
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=\textwidth]{diagrams/useCases.png}
+		\caption{Use cases.}\label{fig:useCases}
+	\end{center}
+\end{figure}
+
+The different actors and use cases are represented on \fref{fig:useCases}. Each
+use case is explained next.
+
+\paragraph{Play a match}
+
+The game interface reads the moves presented by the player and shows their
+result on the board.
+
+\paragraph{Generate moves}
+
+The engine interface reads the input for generating a move as stated by the
+GTP protocol and outputs the coordinates of the board to play.
+
+\paragraph{Use as backend for machine player}
+
+The engine is used as the backend for generating moves for a machine player.
+
+\subsection{Subsystems}
+
+\subsubsection{Subsystems description}
+
+There will be two main subsystems.
+
+% TODO: Are there really two different subsystems? They look very coupled, since
+% the engine will use some classes of the game. This section is more suited for
+% independently run systems which communicate through some common interface.
+
+The first, called the Game System, will be in charge of storing all the state
+information regarding a Go match, such as the history of moves, the possible
+variations, the state of the board at any given time or the current number of
+captured stones.
+
+The second, called the Engine System, will implement the GTP interface and use
+the Game System to analyze positions and generate moves via decision algorithms.
+
+\subsection{Class analysis}
+
+The classes resulting from the analysis phase are shown in
+\fref{fig:analysisClasses}.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=\textwidth]{diagrams/analysisClasses.png}
+		\caption{General classes obtained from the analysis
+		phase.}\label{fig:analysisClasses}
+	\end{center}
+\end{figure}

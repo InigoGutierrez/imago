@@ -1,0 +1,18 @@
+@startgantt
+
+!include skinparams.puml
+!include skinparamsGantt.puml
+
+'printscale weekly
+Sunday are closed
+
+Project starts 2020-11-02
+
+-- Game Implementation --
+[Domain modelling] as [DM] lasts 6 days
+[Domain implementation] as [DI] lasts 30 days
+[Domain testing] as [DT] lasts 30 days
+[DM] -> [DI]
+[DM] -> [DT]
+
+@endgantt

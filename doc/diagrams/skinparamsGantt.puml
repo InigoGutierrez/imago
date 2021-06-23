@@ -1,0 +1,14 @@
+@startuml
+
+<style>
+ganttDiagram {
+    task {
+        FontSize 15
+    }
+    separator {
+        FontSize 20
+    }
+}
+</style>
+
+@enduml

@@ -1,0 +1,162 @@
+\section{Planning}
+
+\subsection{Driving needs}
+
+As one of the deepest and most studied games in the world, Go presents a very
+interesting problem for artificial intelligence. Implementing not only the
+game's simple but subtle rules, but a system capable of playing it with a
+satisfying level of skill, is a task worth of pursuing as an exercise on
+software design, algorithmics and AI research.
+
+On the practical level, this project can be a foundation for the development of
+different Go analysis algorithms by providing an existing engine to house them,
+which can be of interest to Go players and software scientists alike.
+
+\subsection{Reach}
+
+Presented here are the ideal targets of the project.
+
+\begin{itemize}
+	\item An implementation of the game of Go, that is, a system for holding the
+		moves and variants of a match (a tree of moves) and the logic for the
+		game's rules.
+	\item An engine capable of analyzing board positions and generating strong
+		moves.
+	\item Either a GUI specifically developed for the project or an
+		implementation of an existing protocol so the engine can be used with
+		existing tools and GUIs.
+\end{itemize}
+
+\subsection{Project stages}
+
+The project will be organized in several stages based on the different
+components and needs.
+
+\subsubsection{Game implementation}
+
+The rules of the game must be implemented, ideally in a way they can be tested
+by direct human play. This system will at its bare minimum represent the
+Japanese Go rules (area scoring, no superko rule, no suicide moves).
+
+\subsubsection{Engine implementation}
+
+The key of this project is to create some kind of system able to generate strong
+moves based on any given board configuration: this will be such system. It will
+implement an existing protocol so it can be used with other compatible tools. It
+has to be able to receive game updates and configuration and to output moves for
+either player. It should also be modular enough so different algorithms can be
+selected and tested against each other as an experimental search for the best of
+them.
+
+\subsubsection{Artificial Intelligence algorithms}
+
+Different algorithms for the engine to use should be implemented and tested. The
+results of this development and testing process should be presented as part of
+the final version of the project.
+
+\subsection{Logistics}
+
+The project will be developed by Íñigo Gutiérrez Fernández, student of the
+Computer Software Engineering at the University of Oviedo, with supervision from
+Vicente García Díaz, Associate Professor in the Department of Computer Science
+at the University of Oviedo.
+
+The used material consists of a development and testing machine owned by the
+student with specifications stated later on the project duration.
+
+\subsection{Work plan}
+
+The sole developer will be the student, who is currently working as a Junior
+Software Engineer on a 35 hour per week schedule and no university
+responsibilities other than this project. Taking this into account, a sensible
+initial assumption is that he will be able to work 3 hours a day, Monday to
+Saturday. Gantt diagrams for the planned working schedule are shown as
+Fig.~\ref{fig:planificationWorkPlanGame} and
+Fig.~\ref{fig:planificationWorkPlanEngine}.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=\textwidth]{diagrams/planificationWorkPlanGame.png}
+		\caption{Initial work plan for implementing the game.
+		}\label{fig:planificationWorkPlanGame}
+	\end{center}
+\end{figure}
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=\textwidth]{diagrams/planificationWorkPlanEngine.png}
+		\caption{Initial work plan for implementing the engine and algorithms.
+		}\label{fig:planificationWorkPlanEngine}
+	\end{center}
+\end{figure}
+
+\subsection{Previous works}
+
+\subsubsection{Existing engines}
+
+\paragraph{AlphaGo}
+
+AlphaGo is a Go play and analysis engine developed by DeepMind Technologies, a
+company owned by Google. It revolutionized the world of Go in 2015 and 2016 when
+it respectively became the first AI to win against a professional Go player and
+then won against Lee Sedol, a Korean player of the highest professional rank and
+one of the strongest players in the world at the time. Its source code is
+closed, but a paper \parencite{natureAlphaGo2016} written by the team and
+published on Nature is available on
+https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf.
+
+The unprecedented success of AlphaGo served as inspiration for many AI projects,
+including this one.
+
+\paragraph{KataGo}
+
+KataGo is an open source project based on the AlphaGo paper that also achieved
+superhuman strength of play. The availability of its implementation and
+documentation presents a great resource for this project.
+
+\paragraph{GnuGo}
+
+GnuGo is a software capable of playing Go part of the GNU project. Although not
+a strong engine anymore, it is interesting for historic reasons as the free
+software engine for which the GTP protocol was first defined.
+
+\subsubsection{GTP}
+
+GTP (\textit{Go Text Protocol}) is a text based protocol for communication with
+computer go programs. [ref https://www.lysator.liu.se/~gunnar/gtp/] It is the
+protocol used by GNU Go and the more modern and powerful KataGo. By supporting
+GTP the engine developed for this project can be used with existing GUIs and
+other programs, making it easier to use it with the tools users are already
+familiar with.
+
+\subsubsection{Sabaki}
+
+Sabaki is a go board software compatible with GTP engines. It can serve as a GUI
+for the engine developed in this project and as an example of the advantages of
+following a standardized protocol.
+
+\subsection{Technological Infrastructure}
+
+\subsubsection{Programming language}
+
+The resulting product of this project will be one or more pieces of software
+able to be run locally on a personal computer. The programming language of
+choice is Python, for various reasons:
+
+\begin{itemize}
+
+	\item Has established a reputation on scientific fields and more
+		specifically on AI research and development.
+	\item Interpreters are available for many platforms, which allows the most
+		people possible to access the product.
+	\item Although not too deeply, it has been used by the developer student
+		during its degree including in AI and game theory contexts.
+
+\end{itemize}
+
+\subsubsection{Interface}
+
+Both the game and the engine will offer a text interface. For the game this
+allows for quick human testing. For the engine it is mandated by the engine,
+since GTP is a text based protocol for programs using text interfaces.
+Independent programs compatible with this interface can be used as a GUI.

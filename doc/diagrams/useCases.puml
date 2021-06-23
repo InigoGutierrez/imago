@@ -1,0 +1,18 @@
+@startuml
+
+!include skinparams.puml
+
+actor "Human Player" as player
+actor "Human User" as user
+actor "GUI Program" as gui
+
+usecase "Play a match" as play
+usecase "Generate a move" as genMove
+usecase "Use as backend for machine player" as backend
+
+player --> play
+user --> genMove
+gui --> genMove
+gui --> backend
+
+@enduml

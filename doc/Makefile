@@ -3,8 +3,8 @@
 docName = tfg
 outputFolder = out
 
-texFiles = tex/tfg.tex tex/introduction.tex tex/previousWorks.tex tex/interface.tex tex/implementation.tex
-diagramImgs = diagrams/gameRepresentation.png diagrams/modules.png diagrams/sgfModule.png diagrams/gtpEngine.png
+texFiles = tex/tfg.tex tex/introduction.tex tex/planification.tex tex/interface.tex tex/implementation.tex tex/systemAnalysis.tex tex/biber.bib
+diagramImgs = diagrams/gameRepresentation.png diagrams/gtpEngine.png diagrams/modules.png diagrams/planificationWorkPlanEngine.png diagrams/planificationWorkPlanGame.png diagrams/sgfModule.png diagrams/useCases.png diagrams/analysisClasses.png
 
 all: $(docName).pdf
 

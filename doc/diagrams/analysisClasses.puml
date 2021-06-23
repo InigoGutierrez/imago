@@ -1,0 +1,27 @@
+@startuml
+
+!include skinparams.puml
+
+package GameModule {
+    class GameIO
+    class GameTree
+    class GameMove
+}
+
+GameIO -> GameTree
+GameTree -> GameMove
+
+package EngineModule {
+    class EngineIO
+    class EngineLogic
+    interface DecisionAlgorithm
+    class DecisionAlgorithm1
+    class DecisionAlgorithm2
+}
+
+EngineIO -> EngineLogic
+EngineLogic -> DecisionAlgorithm
+DecisionAlgorithm <|.. DecisionAlgorithm1
+DecisionAlgorithm <|.. DecisionAlgorithm2
+
+@enduml

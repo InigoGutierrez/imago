@@ -1,0 +1,30 @@
+@startgantt
+
+!include skinparams.puml
+!include skinparamsGantt.puml
+
+'printscale weekly
+Sunday are closed
+
+Project starts 2021-01-04
+
+-- Engine Implementation --
+[Engine modelling] as [EM] starts 2021-01-04
+[Engine modelling] as [EM] lasts 1 week
+[Engine implementation] as [EI] lasts 5 weeks
+[Engine testing] as [ET] lasts 5 weeks
+
+-- Algorithms Implementations --
+[Algorithm research] as [AR] lasts 1 week
+[Monte Carlo implementation] as [MCI] lasts 3 weeks
+[Extra algorithms research] as [EAR] lasts 2 weeks
+[Extra algorithms implementation] as [EAI] lasts 4 weeks
+
+[EM] -> [AR]
+[AR] -> [MCI]
+[AR] -> [EI]
+[AR] -> [ET]
+[EI] -> [EAR]
+[EAR] -> [EAI]
+
+@endgantt
