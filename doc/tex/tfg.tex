@@ -7,6 +7,9 @@
 \usepackage{csquotes}
 \usepackage{enumitem}
 
+\usepackage{chngcntr}
+\counterwithin{figure}{section}
+
 \usepackage[backend=biber, style=numeric-comp]{biblatex}
 \addbibresource{tex/biber.bib}
 
@@ -26,6 +29,7 @@
 \newcommand{\fref}[1]{Fig.~\ref{#1}}
 %\newcommand{\uurl}[1]{\underline{\url{#1}}}
 
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
 \begin{document}
 
 \frenchspacing

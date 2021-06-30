@@ -188,6 +188,8 @@ the Game System to analyze positions and generate moves via decision algorithms.
 
 \subsection{Class analysis}
 
+\subsubsection{Class diagram}
+
 The classes resulting from the analysis phase are shown in
 \fref{fig:analysisClasses}.
 
@@ -198,3 +200,182 @@ The classes resulting from the analysis phase are shown in
 		phase.}\label{fig:analysisClasses}
 	\end{center}
 \end{figure}
+
+\subsubsection{Class description}
+
+\newcommand{\interclassSpace}{30pt}
+
+\indent
+
+\begin{tabular}{p{\linewidth}}
+	\toprule
+	\textbf{EngineIO} \\
+	\midrule
+	\textbf{Description} \\
+	Offers the interface with the engine. \\
+	\midrule
+	\textbf{Responsibilities} \\
+	% TODO: Single responsibility would be better?
+	\tabitem{Read input.} \\
+	\tabitem{Do some preprocessing.} \\
+	\tabitem{Forward commands to the engine logic component.} \\
+	\midrule
+	\textbf{Proposed attributes} \\
+	\midrule
+	\textbf{Proposed methods} \\
+	\tabitem{\textbf{start()}: Starts reading standard input in a loop.} \\
+	\bottomrule
+\end{tabular}
+
+\vspace{\interclassSpace}
+
+\begin{tabular}{p{\linewidth}}
+	\toprule
+	\textbf{EngineLogic} \\
+	\midrule
+	\textbf{Description} \\
+	Does the core logic and connects the different components of the engine. \\
+	\midrule
+	\textbf{Responsibilities} \\
+	\tabitem{Processes the commands and arguments forwarded by the IO
+	component.} \\
+	\tabitem{Handles the logic of the game by using components from the game
+	module.} \\
+	\tabitem{Calls a decision algorithm to generate moves.} \\
+	\midrule
+	\textbf{Proposed attributes} \\
+	\midrule
+	\textbf{Proposed methods} \\
+	\bottomrule
+\end{tabular}
+
+\vspace{\interclassSpace}
+
+\begin{tabular}{p{\linewidth}}
+	\toprule
+	\textbf{DecisionAlgorithm} \\
+	\midrule
+	\textbf{Description} \\
+	Interface for the decision algorithms to be used by the engine. \\
+	\midrule
+	\textbf{Responsibilities} \\
+	\tabitem{Analyzing game states and generating moves.} \\
+	\midrule
+	\textbf{Proposed attributes} \\
+	\textit{Depends on the algorithm.} \\
+	\midrule
+	\textbf{Proposed methods} \\
+	\tabitem{\textbf{genmove()}: Gives the coordinates of a move to play.} \\
+	\bottomrule
+\end{tabular}
+
+\vspace{\interclassSpace}
+
+\begin{tabular}{p{\linewidth}}
+	\toprule
+	\textbf{GameIO} \\
+	\midrule
+	\textbf{Description} \\
+	Offers the interface with the game. \\
+	\midrule
+	\textbf{Responsibilities} \\
+	\tabitem{Read input.} \\
+	\tabitem{Do some preprocessing.} \\
+	\tabitem{Forward commands to the game state component.} \\
+	\midrule
+	\textbf{Proposed attributes} \\
+	\midrule
+	\textbf{Proposed methods} \\
+	\tabitem{\textbf{start()}: Starts reading standard input in a loop.} \\
+	\bottomrule
+\end{tabular}
+
+\vspace{\interclassSpace}
+
+\begin{tabular}{p{\linewidth}}
+	\toprule
+	\textbf{GameState} \\
+	\midrule
+	\textbf{Description} \\
+	Stores the state of a match. \\
+	\midrule
+	\textbf{Responsibilities} \\
+	\tabitem{Store state information.} \\
+	\tabitem{Offer methods to manipulate the game state.} \\
+	\midrule
+	\textbf{Proposed attributes} \\
+	\midrule
+	\textbf{Proposed methods} \\
+	\tabitem{\textbf{getCurrentPlayer()}: Returns the player who should play
+	next.} \\
+	\tabitem{\textbf{playMove()}: Play a move in the specified coordinates
+	for the specified player.} \\
+	\tabitem{\textbf{playMoveForPlayer()}: Play a move in the specified coordinates
+	for the player who should play next.} \\
+	\tabitem{\textbf{undo()}: Reset the state to how it was just before the
+	last move was played.} \\
+	\bottomrule
+\end{tabular}
+
+\vspace{\interclassSpace}
+
+\begin{tabular}{p{\linewidth}}
+	\toprule
+	\textbf{GameTree} \\
+	\midrule
+	\textbf{Description} \\
+	Stores the moves and variations in a match. \\
+	\midrule
+	\textbf{Responsibilities} \\
+	\tabitem{Store the base node of the tree of moves of a match.} \\
+	\midrule
+	\textbf{Proposed attributes} \\
+	\tabitem{\textbf{GameMove root}: First move of the match (normally a
+	symbolic move representing the empty board before the actual first move of a
+	player).} \\
+	\midrule
+	\textbf{Proposed methods} \\
+	\bottomrule
+\end{tabular}
+
+\vspace{\interclassSpace}
+
+\begin{tabular}{p{\linewidth}}
+	\toprule
+	\textbf{GameMove} \\
+	\midrule
+	\textbf{Description} \\
+	Stores information about a specific move and its relationships to the
+	previous and next moves. \\
+	\midrule
+	\textbf{Responsibilities} \\
+	\tabitem{Store information about a move (board, player, coordinates\ldots).} \\
+	\midrule
+	\textbf{Proposed attributes} \\
+	\tabitem{\textbf{GameBoard board}: The board as of this move.} \\
+	\tabitem{\textbf{GameMove[] nextMoves}: The list of moves played after this
+	one. Different moves represent different game variations.} \\
+	\tabitem{\textbf{GameMove previousMove}: The move before this one.} \\
+	\tabitem{\textbf{boolean isPass}: True if the move is a pass and not a stone
+	placement.} \\
+	\tabitem{\textbf{int[] coords}: The coordinates of the board the move was
+	played at. Have no meaning if \textbf{isPass} is true.} \\
+	\midrule
+	\textbf{Proposed methods} \\
+	\tabitem{\textbf{getRow()}: Returns the row the move was played at.} \\
+	\tabitem{\textbf{getCol()}: Returns the col the move was played at.} \\
+	\tabitem{\textbf{getPlayer()}: Returns the player who played the move.} \\
+	\tabitem{\textbf{getNextPlayer()}: Returns the player who should play after
+	this move.} \\
+	\tabitem{\textbf{getGameLength()}: Returns the number of moves the game has
+	had.} \\
+	\tabitem{\textbf{getPlayableVertices()}: Returns the legal vertices for the
+	next move.} \\
+	\tabitem{\textbf{addMove()}: Inserts a new children move for the given
+	coordinates and for the player who should make the next move.} \\
+	\tabitem{\textbf{addMoveForPlayer()}: Inserts a new children move for the given
+	coordinates and player.} \\
+	\bottomrule
+\end{tabular}
+
+\vspace{\interclassSpace}

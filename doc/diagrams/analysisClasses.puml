@@ -4,24 +4,28 @@
 
 package GameModule {
     class GameIO
+    class GameState
     class GameTree
     class GameMove
 }
 
-GameIO -> GameTree
+GameIO -> GameState
+GameState -> GameTree
 GameTree -> GameMove
 
 package EngineModule {
     class EngineIO
     class EngineLogic
     interface DecisionAlgorithm
-    class DecisionAlgorithm1
     class DecisionAlgorithm2
+    class DecisionAlgorithm1
 }
 
-EngineIO -> EngineLogic
+EngineIO --> EngineLogic
 EngineLogic -> DecisionAlgorithm
 DecisionAlgorithm <|.. DecisionAlgorithm1
 DecisionAlgorithm <|.. DecisionAlgorithm2
+
+EngineLogic --> GameTree
 
 @enduml
